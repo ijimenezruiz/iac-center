@@ -1,38 +1,53 @@
-$confcen = <<-SCRIPT
-sudo cat > "/etc/sysconfig/network-scripts/ifcfg-eth1" << _EOF_
-DEVICE=eth1
-BOOTPROTO=none
-ONBOOT=yes
-NETMASK=255.255.255.0
-IPADDR=192.168.80.8
-_EOF_
-sudo ifdown eth1
-sudo ifup eth1
+$provision_ansible_machine = <<-SCRIPT
+# Install pyhon because ansible needs
 sudo yum -y install python epel-repo
 sudo yum -y install ansible
 SCRIPT
-Vagrant.configure(2) do |config|
-	#Nombre a dar
-	config.vm.box = "maquina1"
-  	config.vm.hostname= "Ansible-Centos"
-  	#Nombre de SO a bajar
-  	config.vm.box = "centos/7"
 
-    config.vm.provision :shell do |s|
-      s.inline = $confcen
+$provision_debian_machine = <<-SCRIPT
+# Install pyhon because ansible needs
+sudo apt install python -y
+SCRIPT
+
+Vagrant.configure("2") do |config|
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+    vb.customize ["modifyvm", :id, "--usb", "off"]
+    vb.customize ["modifyvm", :id, "--usbehci", "off"]
+  end
+
+  config.vm.define "ansible", primary: true do |ansible|
+    ansible.vm.provider "virtualbox" do |v|
+      v.memory = "2048"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
     end
+    ansible.vm.box = "maquina1"
+    ansible.vm.hostname= "Ansible-Centos"
+    ansible.vm.network "private_network", ip: "10.25.200.3", virtualbox__intnet: true
+    ansible.vm.box = "centos/7"
 
-  #Especificamos configuracion al proveedor
-  	config.vm.provider :virtualbox do |vb|
-   		vb.customize ["modifyvm", :id, "--memory", "2048", "--cpus", "2"]
-      	vb.customize ["modifyvm", :id, "--nic1", "nat"]
-     	vb.customize ["modifyvm", :id, "--nic2", "intnet"]
+    ansible.vm.provision :shell do |s|
+      s.inline = $provision_ansible_machine
+    end
+  end
 
-   	#add second disk
-   		file_to_disk='/home/ivan/Escritorio/lab/discos_virtuales/centosExtra.vdi'
-   		unless File.exist?(file_to_disk)
-        vb.customize ['createhd', '--filename', file_to_disk, '--size', 50 * 1024]
-  		end
-  		vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
-  	end
+  config.vm.define "web", autostart: true do |web|
+    web.vm.provider "virtualbox" do |v|
+      v.memory = "4096"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
+  end
+
+    web.vm.box = "web"
+    web.vm.hostname= "web-dns"
+    web.vm.network "private_network", ip: "10.25.200.2", virtualbox__intnet: true
+    web.vm.box = "generic/debian10"
+
+
+    web.vm.provision :shell do |s|
+      s.inline = $provision_debian_machine
+    end
+  end
 end
