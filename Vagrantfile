@@ -8,7 +8,8 @@ IPADDR=192.168.80.8
 _EOF_
 sudo ifdown eth1
 sudo ifup eth1
-sudo yum -y install python
+sudo yum -y install python epel-repo
+sudo yum -y install ansible
 SCRIPT
 Vagrant.configure(2) do |config|
 	#Nombre a dar
