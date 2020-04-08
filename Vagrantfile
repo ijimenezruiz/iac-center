@@ -50,4 +50,22 @@ Vagrant.configure("2") do |config|
       s.inline = $provision_debian_machine
     end
   end
+
+  config.vm.define "dhcp", autostart: true do |dhcp|
+    dhcp.vm.provider "virtualbox" do |v|
+      v.memory = "4096"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
+  end
+
+    dhcp.vm.box = "dhcp"
+    dhcp.vm.hostname= "dhcp"
+    dhcp.vm.network "private_network", ip: "10.25.200.10", virtualbox__intnet: true
+    dhcp.vm.box = "generic/debian10"
+
+
+    dhcp.vm.provision :shell do |s|
+      s.inline = $provision_debian_machine
+    end
+  end
 end
