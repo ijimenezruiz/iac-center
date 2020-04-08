@@ -5,10 +5,10 @@ BOOTPROTO=none
 ONBOOT=yes
 NETMASK=255.255.255.0
 IPADDR=192.168.80.8
-GATEWAY=192.168.1.1
 _EOF_
 sudo ifdown eth1
 sudo ifup eth1
+sudo yum -y install python
 SCRIPT
 Vagrant.configure(2) do |config|
 	#Nombre a dar
@@ -24,8 +24,8 @@ Vagrant.configure(2) do |config|
   #Especificamos configuracion al proveedor
   	config.vm.provider :virtualbox do |vb|
    		vb.customize ["modifyvm", :id, "--memory", "2048", "--cpus", "2"]
-      vb.customize ["modifyvm", :id, "--nic1", "nat"]
-      vb.customize ["modifyvm", :id, "--nic2", "intnet"]
+      	vb.customize ["modifyvm", :id, "--nic1", "nat"]
+     	vb.customize ["modifyvm", :id, "--nic2", "intnet"]
 
    	#add second disk
    		file_to_disk='/home/ivan/Escritorio/lab/discos_virtuales/centosExtra.vdi'
