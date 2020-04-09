@@ -1,12 +1,15 @@
 $provision_ansible_machine = <<-SCRIPT
 # Install pyhon because ansible needs
-sudo yum -y install python epel-repo
-sudo yum -y install ansible
+yum -y install python epel-repo
+yum -y install ansible
+if [ ! -f /home/vagrant/.ssh/id_rsa ];then su vagrant -s /bin/bash <<< 'ssh-keygen -t rsa -N "" -C "" -f $HOME/.ssh/id_rsa'; else echo "El fichero ya existe";fi
+
 SCRIPT
 
 $provision_debian_machine = <<-SCRIPT
 # Install pyhon because ansible needs
-sudo apt install python -y
+apt install python -y
+if [ ! -f /home/vagrant/.ssh/id_rsa ];then su vagrant -s /bin/bash <<< 'ssh-keygen -t rsa -N "" -C "" -f $HOME/.ssh/id_rsa'; else echo "El fichero ya existe";fi
 SCRIPT
 
 Vagrant.configure("2") do |config|
