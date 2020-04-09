@@ -2,14 +2,10 @@
 - hosts: dhcp
   user: vagrant
   tasks: 
-    - name: crear un fichero vacia
+    - name: intalar DHCP
       become: yes
-      #Solo indico el plugin que voy a usar
-      file: 
-      #Meto todos los parametros de file
-        path: /tmp/prueba_ansible
-        owner: root
-        group: vagrant
-        mode: '0777'
-        state: touch
+      apt:
+        name: isc-dhcp-server
+        update_cache: yes
+        state: present
 ...
