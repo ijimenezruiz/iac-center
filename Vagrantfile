@@ -130,4 +130,18 @@ Vagrant.configure("2") do |config|
     dns2.vm.network "private_network", ip: "10.25.200.65", virtualbox__intnet: true
     dns2.vm.box = "generic/debian10"
   end
+
+  config.vm.define "client", autostart: true do |client|
+    client.vm.provider "virtualbox" do |v|
+      v.memory = "1024"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
+  end
+
+    client.vm.box = "client"
+    client.vm.hostname= "client"
+    client.vm.network "private_network", type: "dhcp", virtualbox__intnet: true
+    client.vm.box = "generic/debian10"
+  end
+
 end

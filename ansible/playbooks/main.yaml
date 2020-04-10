@@ -1,11 +1,6 @@
 ---
 - hosts: dhcp
   user: vagrant
-  tasks: 
-    - name: intalar DHCP
-      become: yes
-      apt:
-        name: isc-dhcp-server
-        update_cache: yes
-        state: present
+  roles:
+    - config_dhcp
 ...

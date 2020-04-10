@@ -1,0 +1,7 @@
+---
+- name: reinicio DHCP
+  become: yes
+  systemd:
+    name: isc-dhcp-server 
+    state: restarted 
+...

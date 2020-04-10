@@ -1,0 +1,15 @@
+---
+
+defaultLeaseTime: 4800
+maxLeaseTime: 7000
+minLeaseTime: 3500
+domainName: asir.test
+domainNameServers: 8.8.8.8, 8.8.4.4
+
+subnet:
+  net: 10.25.200.0
+  mask: 255.255.255.0
+  range: 10.25.200.100 10.25.200.254
+  subnetMask: 255.255.255.0
+  routers: 10.25.200.4
+...
