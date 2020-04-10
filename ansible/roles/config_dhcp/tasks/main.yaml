@@ -1,0 +1,34 @@
+---
+- name: instalar DHCP
+  become: yes
+  apt:
+    name: isc-dhcp-server
+    update_cache: yes
+    state: present
+
+- name: seleccionar interfaz que reparte las IP
+  become: yes
+  notify: reinicio DHCP
+  lineinfile: 
+    path: /etc/default/isc-dhcp-server
+    regexp: '^INTERFACESv4='
+    line: INTERFACESv4="eth1"
+    state: present
+
+- name: reemplazar fichero de configuracion
+  become: yes
+  notify: reinicio DHCP
+  template: 
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: levantar DHCP y habilitarlo en arranque
+  become: yes
+  systemd:
+    name: isc-dhcp-server 
+    state: started 
+    enabled: yes
+...
