@@ -1,0 +1,9 @@
+--- 
+dominioBusqueda: asir.test
+
+soa: ns1.{{ dominioBusqueda }}
+soa2: admin.{{ dominioBusqueda }}
+cliente2: 
+  nombre: client2
+  ip: 10.25.200.25
+...

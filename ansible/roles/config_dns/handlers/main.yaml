@@ -1,0 +1,7 @@
+---
+- name: reinicio DNS
+  become: yes
+  systemd:
+    name: bind9
+    state: restarted 
+...
