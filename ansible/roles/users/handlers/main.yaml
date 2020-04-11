@@ -1,0 +1,7 @@
+---
+- name: reinicio SSH
+  become: yes
+  systemd:
+    name: sshd
+    state: restarted 
+...

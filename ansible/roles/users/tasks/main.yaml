@@ -1,0 +1,26 @@
+---
+- name: No permitir a ssh contraseñas vacías
+  become: yes
+  notify: reinicio SSH
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#PermitEmptyPasswords'
+    line: PermitEmptyPasswords no
+    state: present
+
+- name: crear usuario
+  become: yes
+  user:
+    name: proyecto
+    password: "$6$mysecretsalt$GdCJMd60hPNenh.HJOpArDPltB4IcWUfmPNNp9FHBsRgRA3BzbGBT3fa0dEKsKQW3N6U7GTlS654cTY3ZOo8z0"
+    shell: /bin/bash
+    state: present
+    expires: -1
+
+- name: deshabilitar contraseña usuario vagrant
+  become: yes
+  user:
+    name: vagrant
+    password: "!"
+
+...
