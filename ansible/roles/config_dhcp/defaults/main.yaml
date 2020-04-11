@@ -12,4 +12,8 @@ subnet:
   range: 10.25.200.100 10.25.200.254
   subnetMask: 255.255.255.0
   routers: 10.25.200.4
+host:
+  name: cliente2
+  mac: 08:00:27:D1:4C:66
+  fixedIp: 10.25.200.25
 ...
