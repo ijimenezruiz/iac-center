@@ -35,20 +35,20 @@ Vagrant.configure("2") do |config|
     proxy.vm.box = "generic/debian10"
   end
 
-  config.vm.define "web", autostart: true do |web|
-    web.vm.provider "virtualbox" do |v|
+  config.vm.define "webdns", autostart: true do |webdns|
+    webdns.vm.provider "virtualbox" do |v|
       v.memory = "2048"
       v.customize ["modifyvm", :id, "--nic1", "nat"]
       v.customize ["modifyvm", :id, "--nic2", "intnet"]
-  end
+  end 
 
-    web.vm.box = "web"
-    web.vm.hostname= "web-dns"
-    web.vm.network "private_network", ip: "10.25.200.2", virtualbox__intnet: true
-    web.vm.box = "generic/debian10"
+    webdns.vm.box = "webdns"
+    webdns.vm.hostname= "webdns"
+    webdns.vm.network "private_network", ip: "10.25.200.2", virtualbox__intnet: true
+    webdns.vm.box = "generic/debian10"
 
 
-    web.vm.provision :shell do |s|
+    webdns.vm.provision :shell do |s|
       s.inline = $provision_debian_machine
     end
   end

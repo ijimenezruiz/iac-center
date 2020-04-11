@@ -1,0 +1,43 @@
+---
+
+#- name: test
+  #debug:
+  #  msg: "{{ ansible_facts.hostname }}"
+- name: instalar DNS
+  become: yes
+  apt:
+    name: bind9
+    update_cache: yes
+    state: present
+
+- name: levantar DNS y habilitarlo en arranque
+  become: yes
+  systemd:
+    name: bind9 
+    state: started 
+    enabled: yes
+
+- name: Aseguramos que arranca en IPv4
+  become: yes
+  notify: reinicio DNS
+  lineinfile: 
+    path: /etc/default/bind9
+    regexp: '^OPTIONS'
+    line: OPTIONS="-4 -u bind"
+    state: present
+
+- name: reemplazar ficheros de configuracion
+  become: yes
+  notify: reinicio DNS
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: "{{ item.group }}"
+    mode: '0644'
+  with_items:
+    - { src: resolv.conf.j2, dest: /etc/resolvconf/run/resolv.conf, group: root } 
+    - { src: named.conf.local.j2, dest: /etc/bind/named.conf.local, group: bind } 
+    - { src: db.test.j2, dest: /etc/bind/db.asir.test, group: bind }
+
+...
