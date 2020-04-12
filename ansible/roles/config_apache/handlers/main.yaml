@@ -1,0 +1,7 @@
+---
+- name: reinicio APACHE
+  become: yes
+  systemd:
+    name: apache2 
+    state: restarted 
+...

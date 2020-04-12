@@ -1,6 +1,4 @@
 --- 
-dominioBusqueda: asir.test
-
 soa: ns1.{{ dominioBusqueda }}
 soa2: admin.{{ dominioBusqueda }}
 cliente2: 

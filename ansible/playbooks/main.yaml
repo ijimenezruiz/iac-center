@@ -8,10 +8,13 @@
     - config_dhcp
 
 - hosts: web-dns
+  vars_files: 
+    - ./variablesPlaybook.yaml
   vars: 
     ansible_ssh_private_key_file: ../../.vagrant/machines/webdns/virtualbox/private_key
   user: vagrant
   roles:
     - users
     - config_dns
+    - config_apache
 ...

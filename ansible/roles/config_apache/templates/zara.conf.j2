@@ -1,0 +1,5 @@
+<VirtualHost *:{{ zara.port }}>
+        ServerName www.{{ zara.name }}.{{ dominioBusqueda }}
+        ServerAlias {{ zara.name }}.{{ dominioBusqueda }}
+        DocumentRoot "{{ zaraDirectory.path }}"
+</VirtualHost>

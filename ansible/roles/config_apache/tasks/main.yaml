@@ -1,0 +1,46 @@
+---
+
+- name: Intalar apache
+  become: yes
+  apt:
+    name: apache2
+    update_cache: yes
+    state: present
+
+- name: Levantar apache y habilitarlo en arranque
+  become: yes
+  systemd:
+    name: apache2
+    state: started
+    enabled: yes
+
+- name: Creacion directorio hostvirtual
+  become: yes
+  register: zaraDirectory
+  file:
+    path: /var/www/zara
+    state: directory
+    mode: '0755'
+
+- name: Creacion archivo de configuracion host virtual
+  become: yes
+  notify: reinicio APACHE
+  template: 
+    src: zara.conf.j2
+    dest: /etc/apache2/sites-available/zara.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Activar sitio
+  become: yes
+  register: habilitarSitio
+  shell: "if [ -e /etc/apache2/sites-enabled/zara.conf ];then echo sitioActivado;else a2ensite zara.conf;fi"
+
+- name: reiniciar apache si lo necesito
+  become: yes
+  systemd:
+    name: apache2
+    state: restarted
+  when: '"sitioActivado" not in habilitarSitio.stdout_lines'
+...
