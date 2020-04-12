@@ -29,9 +29,9 @@ Vagrant.configure("2") do |config|
 
     proxy.vm.box = "proxy"
     proxy.vm.hostname= "proxy"
-    proxy.vm.network "private_network", ip: "172.25.200.1", virtualbox__intnet: true
-    proxy.vm.network "private_network", ip: "100.25.200.2", virtualbox__intnet: true
-    proxy.vm.network "private_network", ip: "120.25.200.1", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "10.33.1.1", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "110.10.10.1", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "120.20.20.1", virtualbox__intnet: true
     proxy.vm.box = "generic/debian10"
   end
 
@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
 
     webdns.vm.box = "webdns"
     webdns.vm.hostname= "webdns"
-    webdns.vm.network "private_network", ip: "10.25.200.2", virtualbox__intnet: true
+    webdns.vm.network "private_network", ip: "172.16.1.4", virtualbox__intnet: true
     webdns.vm.box = "generic/debian10"
 
 
@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
 
     dhcp.vm.box = "dhcp"
     dhcp.vm.hostname= "dhcp"
-    dhcp.vm.network "private_network", ip: "10.25.200.10", virtualbox__intnet: true
+    dhcp.vm.network "private_network", ip: "192.168.1.3", virtualbox__intnet: true
     dhcp.vm.box = "generic/debian10"
 
 
@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
 
     backup.vm.box = "backup"
     backup.vm.hostname= "backup"
-    backup.vm.network "private_network", ip: "10.25.200.55", virtualbox__intnet: true
+    backup.vm.network "private_network", ip: "172.16.1.5", virtualbox__intnet: true
     backup.vm.box = "generic/debian10"
   end
 
@@ -93,7 +93,7 @@ Vagrant.configure("2") do |config|
 
     dns2.vm.box = "dns2"
     dns2.vm.hostname= "dns2"
-    dns2.vm.network "private_network", ip: "10.25.200.65", virtualbox__intnet: true
+    dns2.vm.network "private_network", ip: "172.16.1.6", virtualbox__intnet: true
     dns2.vm.box = "generic/debian10"
   end
 
@@ -131,7 +131,9 @@ Vagrant.configure("2") do |config|
     end
     ansible.vm.box = "maquina1"
     ansible.vm.hostname= "Ansible-Centos"
-    ansible.vm.network "private_network", ip: "10.25.200.3", virtualbox__intnet: true
+    ansible.vm.network "private_network", ip: "172.16.1.3", virtualbox__intnet: true
+    #Acordarse borrar esta red
+    ansible.vm.network "private_network", ip: "192.168.1.4", virtualbox__intnet: true
     ansible.vm.box = "centos/7"
     ansible.vm.provision "file", source: ".vagrant", destination: "/vagrant/.vagrant"
     ansible.vm.provision :shell do |s|
