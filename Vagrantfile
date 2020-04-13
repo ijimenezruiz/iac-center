@@ -2,11 +2,18 @@ $provision_ansible_machine = <<-SCRIPT
 # Install pyhon because ansible needs
 yum -y install python epel-release 
 yum -y install ansible
+#borrar al acabar
+yum install -y sshfs
 SCRIPT
 
 $provision_debian_machine = <<-SCRIPT
 # Install pyhon because ansible needs
 apt install python -y
+SCRIPT
+
+#borrar provision
+$provision_clients_machine = <<-SCRIPT
+apt install -y lynx dnsutils
 SCRIPT
 
 Vagrant.configure("2") do |config|
@@ -40,11 +47,15 @@ Vagrant.configure("2") do |config|
       v.memory = "2048"
       v.customize ["modifyvm", :id, "--nic1", "nat"]
       v.customize ["modifyvm", :id, "--nic2", "intnet"]
+      #borrar interfaz
+      v.customize ["modifyvm", :id, "--nic3", "intnet"]
   end 
 
     webdns.vm.box = "webdns"
     webdns.vm.hostname= "webdns"
     webdns.vm.network "private_network", ip: "172.16.1.4", virtualbox__intnet: true
+    #borrar interfaz
+    webdns.vm.network "private_network", ip: "192.168.1.6", virtualbox__intnet: true
     webdns.vm.box = "generic/debian10"
 
 
@@ -120,7 +131,11 @@ Vagrant.configure("2") do |config|
     client2.vm.box = "client2"
     client2.vm.hostname = "client2"
     client2.vm.network "private_network", type: "dhcp", virtualbox__intnet: true, mac: "080027D14C66"
+    
     client2.vm.box = "generic/debian10"
+    client2.vm.provision :shell do |s|
+      s.inline = $provision_clients_machine
+    end
   end
 
   config.vm.define "ansible", primary: true do |ansible|

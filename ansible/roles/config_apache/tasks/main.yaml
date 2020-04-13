@@ -14,7 +14,7 @@
     state: started
     enabled: yes
 
-- name: Creacion directorio hostvirtual
+- name: Creacion directorio hostvirtual zara
   become: yes
   register: zaraDirectory
   file:
@@ -22,25 +22,61 @@
     state: directory
     mode: '0755'
 
+- name: Creacion directorio hostvirtual mercadona
+  become: yes
+  register: mercadonaDirectory
+  file:
+    path: /var/www/mercadona
+    state: directory
+    mode: '0755'
+ 
 - name: Creacion archivo de configuracion host virtual
   become: yes
   notify: reinicio APACHE
   template: 
-    src: zara.conf.j2
-    dest: /etc/apache2/sites-available/zara.conf
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: '0644'
+  with_items:
+    - { src: zara.conf.j2, dest: /etc/apache2/sites-available/zara.conf }
+    - { src: mercadona.conf.j2, dest: /etc/apache2/sites-available/mercadona.conf }
 
-- name: Activar sitio
+- name: Activar sitio zara
   become: yes
-  register: habilitarSitio
-  shell: "if [ -e /etc/apache2/sites-enabled/zara.conf ];then echo sitioActivado;else a2ensite zara.conf;fi"
+  register: habilitarSitioZara
+  shell: "if [ -e /etc/apache2/sites-enabled/zara.conf ];then echo sitioActivadoZara;else a2ensite zara.conf;fi"
 
-- name: reiniciar apache si lo necesito
+- name: Activar sitio mercadona
+  become: yes
+  register: habilitarSitioMercdona
+  shell: "if [ -e /etc/apache2/sites-enabled/mercadona.conf ];then echo sitioActivadoMercadona;else a2ensite mercadona.conf;fi"
+
+
+- name: reiniciar apache si habilito sitio zara
   become: yes
   systemd:
     name: apache2
     state: restarted
-  when: '"sitioActivado" not in habilitarSitio.stdout_lines'
+  when: '"sitioActivadoZara" not in habilitarSitioZara.stdout_lines'
+
+- name: reiniciar apache si habilito sitio mercadona
+  become: yes
+  systemd:
+    name: apache2
+    state: restarted
+  when: '"sitioActivadoMercadona" not in habilitarSitioMercdona.stdout_lines'
+
+- name: fichero sitio zara
+  become: yes
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{  item.dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - { src: "{{ zara.name }}.html", dest: "/var/www/zara/{{ zara.name }}.html "}
+    - { src: "{{ mercadona.name }}.html", dest: "/var/www/mercadona/{{ mercadona.name }}.html" }
 ...

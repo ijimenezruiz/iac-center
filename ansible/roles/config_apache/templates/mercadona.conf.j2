@@ -1,0 +1,9 @@
+<VirtualHost *:{{ mercadona.port }}>
+        ServerName www.{{ mercadona.name }}.{{ dominioBusqueda }}
+        ServerAlias {{ mercadona.name }}.{{ dominioBusqueda }}
+        DocumentRoot "{{ mercadonaDirectory.path }}"
+
+        <IfModule mod_dir.c>
+        		DirectoryIndex {{ mercadona.name }}.html index.html
+        </IfModule>
+</VirtualHost>
