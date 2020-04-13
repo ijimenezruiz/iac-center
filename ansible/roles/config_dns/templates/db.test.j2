@@ -19,6 +19,10 @@ $TTL	86400
 {{ cliente2.nombre }}			IN 		A 		{{ cliente2.ip }}
 
 ;Alias
+{{ zara.name }}					IN    	CNAME 	{{ ansible_facts.hostname }}
+www.{{ zara.name }}				IN    	CNAME 	{{ ansible_facts.hostname }}
+{{ mercadona.name }}					IN    	CNAME 	{{ ansible_facts.hostname }}
+www.{{ mercadona.name }}				IN    	CNAME 	{{ ansible_facts.hostname }}
 
 ;servidor de correo
 @								IN    	MX	10		{{ ansible_facts.hostname }}

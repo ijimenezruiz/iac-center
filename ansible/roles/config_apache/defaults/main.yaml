@@ -3,6 +3,10 @@ zara:
   port: 80
   name: zara  
 
+mercadona:
+  port: 80
+  name: mercadona  
+
 
 
 ...
