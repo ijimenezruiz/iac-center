@@ -7,6 +7,10 @@ mercadona:
   port: 80
   name: mercadona  
 
+ipPermitir: 192.168.1.101
 
+asirTest:
+  port: 80
+  serverName: "{{ dominioBusqueda }}"
 
 ...

@@ -8,7 +8,7 @@
     state: present
 
 - name: Levantar apache y habilitarlo en arranque
-  become: yes
+  become: yessshfs ivan@10.0.2.2:/home/ivan/Escritorio/lab/iac-center /tmp/emptyy -o IdentityFile=.vagrant/machines/ansible/virtualbox/private_key
   systemd:
     name: apache2
     state: started
@@ -30,6 +30,7 @@
     state: directory
     mode: '0755'
  
+
 - name: Creacion archivo de configuracion host virtual
   become: yes
   notify: reinicio APACHE
@@ -42,6 +43,8 @@
   with_items:
     - { src: zara.conf.j2, dest: /etc/apache2/sites-available/zara.conf }
     - { src: mercadona.conf.j2, dest: /etc/apache2/sites-available/mercadona.conf }
+    - { src: status.conf.j2, dest: /etc/apache2/mods-available/status.conf }
+    - { src: default.conf.j2, dest: /etc/apache2/sites-available/000-default.conf }
 
 - name: Activar sitio zara
   become: yes
@@ -68,7 +71,7 @@
     state: restarted
   when: '"sitioActivadoMercadona" not in habilitarSitioMercdona.stdout_lines'
 
-- name: fichero sitio zara
+- name: fichero sitio zara, mercadona y apache
   become: yes
   copy:
     src: "{{ item.src }}"
@@ -79,4 +82,12 @@
   with_items:
     - { src: "{{ zara.name }}.html", dest: "/var/www/zara/{{ zara.name }}.html "}
     - { src: "{{ mercadona.name }}.html", dest: "/var/www/mercadona/{{ mercadona.name }}.html" }
+    - { src: apache2.conf, dest: /etc/apache2/apache2.conf }
+
+- name: Activar modulos (speling)
+  become: yes
+  notify: reinicio APACHE
+  apache2_module:
+    state: present
+    name: speling
 ...
