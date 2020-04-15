@@ -8,7 +8,7 @@
     state: present
 
 - name: Levantar apache y habilitarlo en arranque
-  become: yessshfs ivan@10.0.2.2:/home/ivan/Escritorio/lab/iac-center /tmp/emptyy -o IdentityFile=.vagrant/machines/ansible/virtualbox/private_key
+  become: yes
   systemd:
     name: apache2
     state: started
