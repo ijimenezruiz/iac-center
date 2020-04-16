@@ -1,9 +1,31 @@
-<VirtualHost *:{{ mercadona.port }}>
-        ServerName www.{{ mercadona.name }}.{{ dominioBusqueda }}
-        ServerAlias {{ mercadona.name }}.{{ dominioBusqueda }}
-        DocumentRoot "{{ mercadonaDirectory.path }}"
+<IfModule mod_ssl.c>
+        <VirtualHost *:{{ mercadona.portInseguro }}>
+                ServerName www.{{ mercadona.name }}.{{ dominioBusqueda }}
+                <Location />
+                        Redirect permanent / https://www.{{ mercadona.name }}.{{ dominioBusqueda }}/
+                </location>
+                </VirtualHost>
+        <VirtualHost *:{{ mercadona.portSeguro }}>
+                ServerName www.{{ mercadona.name }}.{{ dominioBusqueda }}
+                ServerAlias {{ mercadona.name }}.{{ dominioBusqueda }}
+                DocumentRoot "{{ mercadonaDirectory.path }}"
 
-        <IfModule mod_dir.c>
-        		DirectoryIndex {{ mercadona.name }}.html index.html
-        </IfModule>
-</VirtualHost>
+                SSLEngine on
+
+                SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+                SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+
+
+                <IfModule mod_dir.c>
+                		DirectoryIndex {{ mercadona.name }}.html index.html
+                </IfModule>
+
+                <Directory /var/www/{{ mercadona.name }}/reclamaciones>
+                	Options FollowSymLinks
+                	DirectoryIndex reclamaciones.html
+                </Directory>
+
+                CustomLog ${APACHE_LOG_DIR}/{{ mercadona.name }}.log combined
+
+        </VirtualHost>
+</IfModule>

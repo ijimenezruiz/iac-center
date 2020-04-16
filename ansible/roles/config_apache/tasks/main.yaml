@@ -1,6 +1,6 @@
 ---
 
-- name: Intalar apache
+- name: Instalar apache
   become: yes
   apt:
     name: apache2
@@ -30,6 +30,22 @@
     state: directory
     mode: '0755'
  
+- name: Creacion directorio de enlace para reclamaciones mercadona
+  become: yes
+  file:
+    path: /home/proyecto/reclamaciones
+    state: directory
+    mode: '0755'
+
+- name: Activar modulos (speling)
+  become: yes
+  notify: reinicio APACHE
+  apache2_module:
+    state: present
+    name: "{{ item.name }}"
+  with_items:
+    - { name: speling }
+    - { name: ssl }
 
 - name: Creacion archivo de configuracion host virtual
   become: yes
@@ -80,14 +96,16 @@
     group: root
     mode: '0644'
   with_items:
-    - { src: "{{ zara.name }}.html", dest: "/var/www/zara/{{ zara.name }}.html "}
+    - { src: "{{ zara.name }}.html", dest: "/var/www/zara/{{ zara.name }}.html" }
     - { src: "{{ mercadona.name }}.html", dest: "/var/www/mercadona/{{ mercadona.name }}.html" }
     - { src: apache2.conf, dest: /etc/apache2/apache2.conf }
+    - { src: reclamaciones.html, dest: /home/proyecto/reclamaciones/reclamaciones.html }
+    - { src: tienda.html, dest: "/var/www/zara/tienda.html" }
 
-- name: Activar modulos (speling)
+- name: Enlace simbolico de mercadona hacia reclamaciones
   become: yes
-  notify: reinicio APACHE
-  apache2_module:
-    state: present
-    name: speling
+  file:
+    src: /home/proyecto/reclamaciones/
+    dest: /var/www/mercadona/reclamaciones
+    state: link
 ...
