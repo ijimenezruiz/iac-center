@@ -102,9 +102,10 @@
     - { src: reclamaciones.html, dest: /home/proyecto/reclamaciones/reclamaciones.html }
     - { src: tienda.html, dest: "/var/www/zara/tienda.html" }
 
-
 - name: Enlace simbolico de mercadona hacia reclamaciones
-  shell:
-    cmd: sudo ln -s /home/proyecto/reclamaciones/ /var/www/mercadona/reclamaciones
-
+  become: yes
+  file:
+    src: /home/proyecto/reclamaciones/
+    dest: /var/www/mercadona/reclamaciones
+    state: link
 ...
