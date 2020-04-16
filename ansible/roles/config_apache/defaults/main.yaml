@@ -1,16 +1,19 @@
 ---
 zara:
-  port: 80
+  portInseguro: 80
+  portSeguro: 443
   name: zara  
 
 mercadona:
-  port: 80
+  portInseguro: 80
+  portSeguro: 443
   name: mercadona  
 
-ipPermitir: 192.168.1.101
+ipPermitir: 192.168.1.100
 
 asirTest:
-  port: 80
+  portInseguro: 80
+  portSeguro: 443
   serverName: "{{ dominioBusqueda }}"
 
 ...

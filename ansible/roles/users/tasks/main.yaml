@@ -13,6 +13,8 @@
   user:
     name: proyecto
     password: "$6$mysecretsalt$GdCJMd60hPNenh.HJOpArDPltB4IcWUfmPNNp9FHBsRgRA3BzbGBT3fa0dEKsKQW3N6U7GTlS654cTY3ZOo8z0"
+    groups: sudo
+    append: yes
     shell: /bin/bash
     state: present
     expires: -1

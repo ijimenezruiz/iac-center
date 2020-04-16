@@ -1,4 +1,4 @@
-<VirtualHost *:{{ zara.port }}>
+<VirtualHost *:{{ zara.portInseguro }}>
         ServerName www.{{ zara.name }}.{{ dominioBusqueda }}
         ServerAlias {{ zara.name }}.{{ dominioBusqueda }}
         DocumentRoot "{{ zaraDirectory.path }}"
@@ -7,4 +7,12 @@
         <IfModule mod_dir.c>
         		DirectoryIndex {{ zara.name }}.html index.html
         </IfModule>
+
+
+        ErrorDocument 404 "Pagina no encontrada, pruebe yendo a nuestro dominio {{ dominioBusqueda }}"
+
+        Redirect /tienda https://www.ofertia.com/catalogo?source=RETAILER_STORE_OVERVIEW&brochureId=2135645251&lat=40.4166909&lng=-3.7003454&filter=retailer-984133%2Csector-100506%2Cpopular&municipality=madrid&openModule=StoreLocationMap&storeId=2135609322&brochureViewId=2349424388#2135645251/1
+
+        CustomLog ${APACHE_LOG_DIR}/{{ zara.name }}.log combined
+
 </VirtualHost>
