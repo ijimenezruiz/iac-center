@@ -2,8 +2,8 @@ $provision_ansible_machine = <<-SCRIPT
 # Install pyhon because ansible needs
 yum -y install python epel-release 
 yum -y install ansible
-#borrar al acabar
-yum install -y sshfs
+chmod 600 /vagrant/.vagrant/machines/dhcp/virtualbox/private_key 
+chmod 600 /vagrant/.vagrant/machines/webdns/virtualbox/private_key 
 SCRIPT
 
 $provision_debian_machine = <<-SCRIPT
@@ -11,10 +11,6 @@ $provision_debian_machine = <<-SCRIPT
 apt install python -y
 SCRIPT
 
-#borrar provision
-$provision_clients_machine = <<-SCRIPT
-apt install -y lynx dnsutils
-SCRIPT
 
 Vagrant.configure("2") do |config|
 
@@ -38,8 +34,39 @@ Vagrant.configure("2") do |config|
     proxy.vm.hostname= "proxy"
     proxy.vm.network "private_network", ip: "10.33.1.1", virtualbox__intnet: true
     proxy.vm.network "private_network", ip: "110.10.10.1", virtualbox__intnet: true
-    proxy.vm.network "private_network", ip: "120.20.20.1", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "120.20.20.2", virtualbox__intnet: true
     proxy.vm.box = "generic/debian10"
+  end
+
+config.vm.define "fw1", autostart: true do |fw1|
+    fw1.vm.provider "virtualbox" do |v|
+      v.memory = "1024"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
+      v.customize ["modifyvm", :id, "--nic3", "intnet"]
+  end
+
+    fw1.vm.box = "fw1"
+    fw1.vm.hostname= "fw1"
+    fw1.vm.network "private_network", ip: "172.16.1.1", virtualbox__intnet: true
+    fw1.vm.network "private_network", ip: "110.10.10.2", virtualbox__intnet: true
+    fw1.vm.box = "generic/debian10"
+    end
+  end
+
+config.vm.define "fw2", autostart: true do |fw2|
+    fw2.vm.provider "virtualbox" do |v|
+      v.memory = "1024"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
+      v.customize ["modifyvm", :id, "--nic3", "intnet"]
+  end
+
+    fw2.vm.box = "fw2"
+    fw2.vm.hostname= "fw2"
+    fw2.vm.network "private_network", ip: "192.168.1.1", virtualbox__intnet: true
+    fw2.vm.network "private_network", ip: "120.20.20.1", virtualbox__intnet: true
+    fw2.vm.box = "generic/debian10"
   end
 
   config.vm.define "webdns", autostart: true do |webdns|
@@ -47,15 +74,11 @@ Vagrant.configure("2") do |config|
       v.memory = "2048"
       v.customize ["modifyvm", :id, "--nic1", "nat"]
       v.customize ["modifyvm", :id, "--nic2", "intnet"]
-      #borrar interfaz
-      v.customize ["modifyvm", :id, "--nic3", "intnet"]
   end 
 
     webdns.vm.box = "webdns"
     webdns.vm.hostname= "webdns"
     webdns.vm.network "private_network", ip: "172.16.1.4", virtualbox__intnet: true
-    #borrar interfaz
-    webdns.vm.network "private_network", ip: "192.168.1.6", virtualbox__intnet: true
     webdns.vm.box = "generic/debian10"
 
 
@@ -131,11 +154,7 @@ Vagrant.configure("2") do |config|
     client2.vm.box = "client2"
     client2.vm.hostname = "client2"
     client2.vm.network "private_network", type: "dhcp", virtualbox__intnet: true, mac: "080027D14C66"
-    
     client2.vm.box = "generic/debian10"
-    client2.vm.provision :shell do |s|
-      s.inline = $provision_clients_machine
-    end
   end
 
   config.vm.define "ansible", primary: true do |ansible|
@@ -147,8 +166,6 @@ Vagrant.configure("2") do |config|
     ansible.vm.box = "maquina1"
     ansible.vm.hostname= "Ansible-Centos"
     ansible.vm.network "private_network", ip: "172.16.1.3", virtualbox__intnet: true
-    #Acordarse borrar esta red
-    ansible.vm.network "private_network", ip: "192.168.1.4", virtualbox__intnet: true
     ansible.vm.box = "centos/7"
     ansible.vm.provision "file", source: ".vagrant", destination: "/vagrant/.vagrant"
     ansible.vm.provision :shell do |s|
