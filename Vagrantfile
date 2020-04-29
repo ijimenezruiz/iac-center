@@ -38,23 +38,22 @@ Vagrant.configure("2") do |config|
     proxy.vm.box = "generic/debian10"
   end
 
-config.vm.define "fw1", autostart: true do |fw1|
+  config.vm.define "fw1", autostart: true do |fw1|
     fw1.vm.provider "virtualbox" do |v|
       v.memory = "1024"
       v.customize ["modifyvm", :id, "--nic1", "nat"]
       v.customize ["modifyvm", :id, "--nic2", "intnet"]
       v.customize ["modifyvm", :id, "--nic3", "intnet"]
-  end
+    end
 
     fw1.vm.box = "fw1"
     fw1.vm.hostname= "fw1"
     fw1.vm.network "private_network", ip: "172.16.1.1", virtualbox__intnet: true
     fw1.vm.network "private_network", ip: "110.10.10.2", virtualbox__intnet: true
     fw1.vm.box = "generic/debian10"
-    end
   end
 
-config.vm.define "fw2", autostart: true do |fw2|
+  config.vm.define "fw2", autostart: true do |fw2|
     fw2.vm.provider "virtualbox" do |v|
       v.memory = "1024"
       v.customize ["modifyvm", :id, "--nic1", "nat"]
