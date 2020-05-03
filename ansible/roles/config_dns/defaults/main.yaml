@@ -4,4 +4,5 @@ soa2: admin.{{ dominioBusqueda }}
 cliente2: 
   nombre: client2
   ip: 192.168.1.25
+google: 8.8.8.8
 ...
