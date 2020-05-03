@@ -40,4 +40,5 @@
     - { src: named.conf.local.j2, dest: /etc/bind/named.conf.local, group: bind } 
     - { src: db.test.j2, dest: /etc/bind/db.asir.test, group: bind }
     - { src: db.192.168.1.j2, dest: /etc/bind/db.192.168.1, group: bind }
+    - { src: named.conf.options.j2, dest: /etc/bind/named.conf.options, group: bind }
 ...
