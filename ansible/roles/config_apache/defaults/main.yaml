@@ -9,7 +9,7 @@ mercadona:
   portSeguro: 443
   name: mercadona  
 
-ipPermitir: 192.168.1.100
+ipPermitir: 10.33.40.100
 
 asirTest:
   portInseguro: 80
