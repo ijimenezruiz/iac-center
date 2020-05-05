@@ -100,7 +100,6 @@
     - { src: "{{ mercadona.name }}.html", dest: "/var/www/mercadona/{{ mercadona.name }}.html" }
     - { src: apache2.conf, dest: /etc/apache2/apache2.conf }
     - { src: reclamaciones.html, dest: /home/proyecto/reclamaciones/reclamaciones.html }
-    - { src: tienda.html, dest: "/var/www/zara/tienda.html" }
 
 - name: Enlace simbolico de mercadona hacia reclamaciones
   become: yes

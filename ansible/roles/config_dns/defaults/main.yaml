@@ -3,6 +3,6 @@ soa: ns1.{{ dominioBusqueda }}
 soa2: admin.{{ dominioBusqueda }}
 cliente2: 
   nombre: client2
-  ip: 192.168.1.25
+  ip: 10.33.40.25
 google: 8.8.8.8
 ...

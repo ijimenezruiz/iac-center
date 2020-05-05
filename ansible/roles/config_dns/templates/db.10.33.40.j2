@@ -1,0 +1,18 @@
+;
+; Zona directa {{ dominioBusqueda }}
+;
+$TTL	604800
+@	IN	SOA	{{ soa }} {{ soa2 }} (
+		 2018211001		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+
+;Servidores DNS de la zona
+	IN	NS	{{ ansible_facts.hostname }}.{{ dominioBusqueda }}.
+
+;Registros PTR
+3			IN    	PTR 	{{ ansible_facts.hostname }}.{{ dominioBusqueda }}
+25			IN		PTR		{{ cliente2.nombre }}.{{ dominioBusqueda }}
+

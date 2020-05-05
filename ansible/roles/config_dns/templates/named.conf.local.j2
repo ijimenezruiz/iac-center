@@ -3,7 +3,12 @@ zone "{{ dominioBusqueda }}" {
      file "/etc/bind/db.{{ dominioBusqueda }}";
 };
 
-zone "1.168.192.in-addr.arpa" {
+zone "40.33.10.in-addr.arpa" {
 	 type master;
-	 file "/etc/bind/db.192.168.1";  
+	 file "/etc/bind/db.10.33.40";  
+};
+
+zone "50.33.10.in-addr.arpa" {
+	 type master;
+	 file "/etc/bind/db.10.33.50";  
 };
