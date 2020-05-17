@@ -4,6 +4,7 @@ yum -y install python epel-release
 yum -y install ansible
 chmod 600 /vagrant/.vagrant/machines/dhcp/virtualbox/private_key 
 chmod 600 /vagrant/.vagrant/machines/webdns/virtualbox/private_key 
+chmod 600 /vagrant/.vagrant/machines/apacheInt/virtualbox/private_key 
 SCRIPT
 
 $provision_debian_machine = <<-SCRIPT
@@ -33,8 +34,8 @@ Vagrant.configure("2") do |config|
     proxy.vm.box = "proxy"
     proxy.vm.hostname= "proxy"
     proxy.vm.network "private_network", ip: "10.33.10.1", virtualbox__intnet: true
-    proxy.vm.network "private_network", ip: "10.33.20.1", virtualbox__intnet: true
-    proxy.vm.network "private_network", ip: "10.30.30.1", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "10.33.10.33", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "10.33.10.65", virtualbox__intnet: true
     proxy.vm.box = "generic/debian10"
   end
 
@@ -48,8 +49,8 @@ Vagrant.configure("2") do |config|
 
     fw1.vm.box = "fw1"
     fw1.vm.hostname= "fw1"
-    fw1.vm.network "private_network", ip: "10.33.30.2", virtualbox__intnet: true
-    fw1.vm.network "private_network", ip: "10.33.40.1", virtualbox__intnet: true
+    fw1.vm.network "private_network", ip: "10.33.10.66", virtualbox__intnet: true
+    fw1.vm.network "private_network", ip: "10.33.10.97", virtualbox__intnet: true
     fw1.vm.box = "generic/debian10"
   end
 
@@ -62,11 +63,29 @@ Vagrant.configure("2") do |config|
 
     webdns.vm.box = "webdns"
     webdns.vm.hostname= "webdns"
-    webdns.vm.network "private_network", ip: "10.33.40.4", virtualbox__intnet: true
+    webdns.vm.network "private_network", ip: "10.33.10.99", virtualbox__intnet: true
     webdns.vm.box = "generic/debian10"
 
 
     webdns.vm.provision :shell do |s|
+      s.inline = $provision_debian_machine
+    end
+  end
+
+   config.vm.define "apacheInt", autostart: true do |apacheInt|
+    apacheInt.vm.provider "virtualbox" do |v|
+      v.memory = "2048"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
+  end 
+
+    apacheInt.vm.box = "apacheInt"
+    apacheInt.vm.hostname= "apacheInt"
+    apacheInt.vm.network "private_network", ip: "10.33.10.101", virtualbox__intnet: true
+    apacheInt.vm.box = "generic/debian10"
+
+
+    apacheInt.vm.provision :shell do |s|
       s.inline = $provision_debian_machine
     end
   end
@@ -80,26 +99,13 @@ Vagrant.configure("2") do |config|
 
     dhcp.vm.box = "dhcp"
     dhcp.vm.hostname= "dhcp"
-    dhcp.vm.network "private_network", ip: "10.33.50.2", virtualbox__intnet: true
+    dhcp.vm.network "private_network", ip: "10.33.10.130", virtualbox__intnet: true
     dhcp.vm.box = "generic/debian10"
 
 
     dhcp.vm.provision :shell do |s|
       s.inline = $provision_debian_machine
     end
-  end
-
-  config.vm.define "backup", autostart: true do |backup|
-    backup.vm.provider "virtualbox" do |v|
-      v.memory = "1024"
-      v.customize ["modifyvm", :id, "--nic1", "nat"]
-      v.customize ["modifyvm", :id, "--nic2", "intnet"]
-  end
-
-    backup.vm.box = "backup"
-    backup.vm.hostname= "backup"
-    backup.vm.network "private_network", ip: "10.33.40.5", virtualbox__intnet: true
-    backup.vm.box = "generic/debian10"
   end
 
   config.vm.define "dns2", autostart: true do |dns2|
@@ -111,21 +117,8 @@ Vagrant.configure("2") do |config|
 
     dns2.vm.box = "dns2"
     dns2.vm.hostname= "dns2"
-    dns2.vm.network "private_network", ip: "10.33.40.6", virtualbox__intnet: true
+    dns2.vm.network "private_network", ip: "10.33.10.100", virtualbox__intnet: true
     dns2.vm.box = "generic/debian10"
-  end
-
-  config.vm.define "client", autostart: true do |client|
-    client.vm.provider "virtualbox" do |v|
-      v.memory = "1024"
-      v.customize ["modifyvm", :id, "--nic1", "nat"]
-      v.customize ["modifyvm", :id, "--nic2", "intnet"]
-  end
-
-    client.vm.box = "client"
-    client.vm.hostname= "client"
-    client.vm.network "private_network", type: "dhcp", virtualbox__intnet: true
-    client.vm.box = "generic/debian10"
   end
 
   config.vm.define "client2", autostart: true do |client2|
@@ -149,7 +142,7 @@ Vagrant.configure("2") do |config|
     end
     ansible.vm.box = "maquina1"
     ansible.vm.hostname= "Ansible-Centos"
-    ansible.vm.network "private_network", ip: "10.33.40.3", virtualbox__intnet: true
+    ansible.vm.network "private_network", ip: "10.33.10.98", virtualbox__intnet: true
     ansible.vm.box = "centos/7"
     ansible.vm.provision "file", source: ".vagrant", destination: "/vagrant/.vagrant"
     ansible.vm.provision :shell do |s|

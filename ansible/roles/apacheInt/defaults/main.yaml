@@ -1,16 +1,13 @@
 ---
-zara:
+marca:
   portInseguro: 80
   portSeguro: 443
-  name: zara  
+  name: marca  
 
-mercadona:
+elmundo:
   portInseguro: 80
   portSeguro: 443
-  name: mercadona  
-
-#Regla para que el cliente ADMINISTRADOR pueda consultar el status del servidor apache
-ipPermitir: 10.33.10.12
+  name: elmundo  
 
 asirTest:
   portInseguro: 80

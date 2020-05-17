@@ -1,14 +1,6 @@
 zone "{{ dominioBusqueda }}" {
      type master;
      file "/etc/bind/db.{{ dominioBusqueda }}";
+     allow-transfer { 10.33.10.100; };
 };
 
-zone "40.33.10.in-addr.arpa" {
-	 type master;
-	 file "/etc/bind/db.10.33.40";  
-};
-
-zone "50.33.10.in-addr.arpa" {
-	 type master;
-	 file "/etc/bind/db.10.33.50";  
-};

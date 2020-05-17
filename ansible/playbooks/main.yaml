@@ -19,4 +19,16 @@
     - users
     - config_dns
     - config_apache
+
+- hosts: apacheInt
+#Archivo donde tengo variables creadas por mi que afectan a todo el playbook
+  vars_files: 
+    - ./variablesPlaybook.yaml
+  #Variables
+  vars: 
+    ansible_ssh_private_key_file: ../../.vagrant/machines/apacheInt/virtualbox/private_key
+  user: vagrant
+  roles:
+    - users
+    - apacheInt
 ...
