@@ -7,13 +7,13 @@ domainName: asir.test
 domainNameServers: 8.8.8.8, 8.8.4.4
 
 subnet:
-  net: 10.33.50.0
-  mask: 255.255.255.0
-  range: 10.33.50.100 10.33.50.254
-  subnetMask: 255.255.255.0
-  routers: 10.33.50.1
+  net: 10.33.10.128
+  mask: 255.255.255.224
+  range: 10.33.10.132 10.33.10.150
+  subnetMask: 255.255.255.224
+  routers: 10.33.10.129
 host:
   name: cliente2
   mac: 08:00:27:D1:4C:66
-  fixedIp: 10.33.50.25
+  fixedIp: 10.33.10.131
 ...

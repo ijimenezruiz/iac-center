@@ -1,0 +1,92 @@
+---
+
+- name: Instalar apache
+  become: yes
+  apt:
+    name: apache2
+    update_cache: yes
+    state: present
+
+- name: Levantar apache y habilitarlo en arranque
+  become: yes
+  systemd:
+    name: apache2
+    state: started
+    enabled: yes
+
+- name: Creacion directorio hostvirtual internet simulacion marca
+  become: yes
+  register: marcaDirectory
+  file:
+    path: /var/www/marca
+    state: directory
+    mode: '0755'
+
+- name: Creacion directorio hostvirtual internet simulacion elmundo
+  become: yes
+  register: elmundoDirectory
+  file:
+    path: /var/www/elmundo
+    state: directory
+    mode: '0755'
+
+- name: Activar modulos (speling)
+  become: yes
+  notify: reinicio APACHE
+  apache2_module:
+    state: present
+    name: "{{ item.name }}"
+  with_items:
+    - { name: speling }
+    - { name: ssl }
+
+- name: Creacion archivo de configuracion host virtual
+  become: yes
+  notify: reinicio APACHE
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - { src: marca.conf.j2, dest: /etc/apache2/sites-available/marca.conf }
+    - { src: elmundo.conf.j2, dest: /etc/apache2/sites-available/elmundo.conf }
+ 
+- name: Activar sitio marca
+  become: yes
+  register: habilitarSitioMarca
+  shell: "if [ -e /etc/apache2/sites-enabled/marca.conf ];then echo sitioActivadoMarca;else a2ensite marca.conf;fi"
+
+- name: Activar sitio elmundo
+  become: yes
+  register: habilitarSitioElmundo
+  shell: "if [ -e /etc/apache2/sites-enabled/elmundo.conf ];then echo sitioActivadoElmundo;else a2ensite elmundo.conf;fi"
+
+
+- name: reiniciar apache si habilito sitio marca
+  become: yes
+  systemd:
+    name: apache2
+    state: restarted
+  when: '"sitioActivadoMarca" not in habilitarSitioMarca.stdout_lines'
+
+- name: reiniciar apache si habilito sitio elmundo
+  become: yes
+  systemd:
+    name: apache2
+    state: restarted
+  when: '"sitioActivadoElmundo" not in habilitarSitioElmundo.stdout_lines'
+
+- name: fichero sitio marca y elmundo
+  become: yes
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{  item.dest }}"
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - { src: "{{ marca.name }}.html", dest: "/var/www/marca/{{ marca.name }}.html" }
+    - { src: "{{ elmundo.name }}.html", dest: "/var/www/elmundo/{{ elmundo.name }}.html" }
+    - { src: apache22.conf, dest: /etc/apache2/apache2.conf }

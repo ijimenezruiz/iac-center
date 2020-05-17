@@ -1,0 +1,27 @@
+<IfModule mod_ssl.c>
+        <VirtualHost *:{{ elmundo.portInseguro }}>
+                ServerName www.{{ elmundo.name }}.{{ dominioBusqueda }}
+                <Location />
+                        Redirect permanent / https://www.{{ elmundo.name }}.{{ dominioBusqueda }}/
+                </location>
+        </VirtualHost>
+        <VirtualHost *:{{ elmundo.portSeguro }}>
+                ServerName www.{{ elmundo.name }}.{{ dominioBusqueda }}
+                ServerAlias {{ elmundo.name }}.{{ dominioBusqueda }}
+                DocumentRoot "{{ elmundoDirectory.path }}"
+
+                SSLEngine on
+
+                SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+                SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+
+
+                <IfModule mod_dir.c>
+                		DirectoryIndex {{ elmundo.name }}.html index.html
+                </IfModule>
+
+
+                CustomLog ${APACHE_LOG_DIR}/{{ elmundo.name }}.log combined
+
+        </VirtualHost>
+</IfModule>

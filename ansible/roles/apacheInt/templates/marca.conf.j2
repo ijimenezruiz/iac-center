@@ -1,0 +1,27 @@
+<IfModule mod_ssl.c>
+        <VirtualHost *:{{ marca.portInseguro }}>
+                ServerName www.{{ marca.name }}.{{ dominioBusqueda }}
+                <Location />
+                        Redirect permanent / https://www.{{ marca.name }}.{{ dominioBusqueda }}/
+                </location>
+        </VirtualHost>
+        <VirtualHost *:{{ marca.portSeguro }}>
+                ServerName www.{{ marca.name }}.{{ dominioBusqueda }}
+                ServerAlias {{ marca.name }}.{{ dominioBusqueda }}
+                DocumentRoot "{{ marcaDirectory.path }}"
+
+                SSLEngine on
+
+                SSLCertificateFile      /etc/ssl/certs/ssl-cert-snakeoil.pem
+                SSLCertificateKeyFile   /etc/ssl/private/ssl-cert-snakeoil.key
+
+
+                <IfModule mod_dir.c>
+                		DirectoryIndex {{ marca.name }}.html index.html
+                </IfModule>
+
+
+                CustomLog ${APACHE_LOG_DIR}/{{ marca.name }}.log combined
+
+        </VirtualHost>
+</IfModule>
