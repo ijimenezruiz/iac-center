@@ -2,9 +2,8 @@ $provision_ansible_machine = <<-SCRIPT
 # Install pyhon because ansible needs
 yum -y install python epel-release 
 yum -y install ansible
-chmod 600 /vagrant/.vagrant/machines/dhcp/virtualbox/private_key 
-chmod 600 /vagrant/.vagrant/machines/webdns/virtualbox/private_key 
-chmod 600 /vagrant/.vagrant/machines/apacheInt/virtualbox/private_key 
+yum -y install net-tools
+for i in $(find /vagrant/.vagrant/machines/ -name private_key);do chmod 600 $i;done
 SCRIPT
 
 $provision_debian_machine = <<-SCRIPT
@@ -142,7 +141,7 @@ Vagrant.configure("2") do |config|
     end
     ansible.vm.box = "maquina1"
     ansible.vm.hostname= "Ansible-Centos"
-    ansible.vm.network "private_network", ip: "10.33.10.98", virtualbox__intnet: true
+    ansible.vm.network "private_network", ip: "10.33.10.98", netmask: "255.255.255.224", virtualbox__intnet: true
     ansible.vm.box = "centos/7"
     ansible.vm.provision "file", source: ".vagrant", destination: "/vagrant/.vagrant"
     ansible.vm.provision :shell do |s|
