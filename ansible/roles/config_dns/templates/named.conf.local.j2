@@ -1,6 +1,6 @@
 zone "{{ dominioBusqueda }}" {
      type master;
      file "/etc/bind/db.{{ dominioBusqueda }}";
-     allow-transfer { 10.33.10.100; };
+     allow-transfer { {{ dns2 }}; };
 };
 
