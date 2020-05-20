@@ -1,0 +1,13 @@
+---
+- name: comprobar si existe fichero de private_key
+  connection: local
+  register: validacion
+  stat:
+    path: /vagrant/.vagrant/machines/{{ ansible_facts.hostname }}/virtualbox/private_key
+   
+
+- name: validar si sigue adelante(true) o no(false)
+  fail:
+    msg: "no has encendido ansible el ultimo"
+  when: "not validacion.stat.exists"
+...

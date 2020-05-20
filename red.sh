@@ -2,7 +2,7 @@
 #NO INTERNET
 
 if [ $# -ne 1 ];then
-	echo "Me tienes que pasar un argumento"
+	echo "Me tienes que pasar un argumento: sinInt conInt"
 	exit 1
 fi
 
@@ -21,8 +21,8 @@ case $1 in
     ;;
 
     *)
-       echo "Argumentos permitodos: sinInt y conInt"
-       exit 1
+      echo "Argumentos permitodos: sinInt y conInt"
+      exit 1
     ;;
 
 esac

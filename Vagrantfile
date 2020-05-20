@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
 
     webdns.vm.box = "webdns"
     webdns.vm.hostname= "webdns"
-    webdns.vm.network "private_network", ip: "10.33.10.99", virtualbox__intnet: true
+    webdns.vm.network "private_network", ip: "10.33.10.99", netmask: "255.255.255.224", virtualbox__intnet: true
     webdns.vm.box = "generic/debian10"
 
 
@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
 
     apacheInt.vm.box = "apacheInt"
     apacheInt.vm.hostname= "apacheInt"
-    apacheInt.vm.network "private_network", ip: "10.33.10.101", virtualbox__intnet: true
+    apacheInt.vm.network "private_network", ip: "10.33.10.101", netmask: "255.255.255.224", virtualbox__intnet: true
     apacheInt.vm.box = "generic/debian10"
 
 
@@ -98,7 +98,7 @@ Vagrant.configure("2") do |config|
 
     dhcp.vm.box = "dhcp"
     dhcp.vm.hostname= "dhcp"
-    dhcp.vm.network "private_network", ip: "10.33.10.130", virtualbox__intnet: true
+    dhcp.vm.network "private_network", ip: "10.33.10.130", netmask: "255.255.255.224", virtualbox__intnet: true
     dhcp.vm.box = "generic/debian10"
 
 
