@@ -32,9 +32,9 @@ Vagrant.configure("2") do |config|
 
     proxy.vm.box = "proxy"
     proxy.vm.hostname= "proxy"
-    proxy.vm.network "private_network", ip: "10.33.10.1", virtualbox__intnet: true
-    proxy.vm.network "private_network", ip: "10.33.10.33", virtualbox__intnet: true
-    proxy.vm.network "private_network", ip: "10.33.10.65", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "10.33.10.1", netmask: "255.255.255.224", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "10.33.10.33", netmask: "255.255.255.224", virtualbox__intnet: true
+    proxy.vm.network "private_network", ip: "10.33.10.65", netmask: "255.255.255.224", virtualbox__intnet: true
     proxy.vm.box = "generic/debian10"
   end
 
@@ -48,8 +48,8 @@ Vagrant.configure("2") do |config|
 
     fw1.vm.box = "fw1"
     fw1.vm.hostname= "fw1"
-    fw1.vm.network "private_network", ip: "10.33.10.66", virtualbox__intnet: true
-    fw1.vm.network "private_network", ip: "10.33.10.97", virtualbox__intnet: true
+    fw1.vm.network "private_network", ip: "10.33.10.66", netmask: "255.255.255.224", virtualbox__intnet: true
+    fw1.vm.network "private_network", ip: "10.33.10.97", netmask: "255.255.255.224", virtualbox__intnet: true
     fw1.vm.box = "generic/debian10"
   end
 
@@ -116,7 +116,7 @@ Vagrant.configure("2") do |config|
 
     dns2.vm.box = "dns2"
     dns2.vm.hostname= "dns2"
-    dns2.vm.network "private_network", ip: "10.33.10.100", virtualbox__intnet: true
+    dns2.vm.network "private_network", ip: "10.33.10.100", netmask: "255.255.255.224", virtualbox__intnet: true
     dns2.vm.box = "generic/debian10"
   end
 
