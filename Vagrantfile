@@ -5,7 +5,6 @@ yum -y install ansible
 yum -y install net-tools
 for i in $(find /vagrant/.vagrant/machines/ -name private_key);do chmod 600 $i;done
 SCRIPT
-sudo route add -net 10.33.10.160/27 gw 10.33.10.97 dev eth1
 
 $provision_debian_machine = <<-SCRIPT
 # Install pyhon because ansible needs
