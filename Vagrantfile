@@ -53,6 +53,23 @@ Vagrant.configure("2") do |config|
     fw1.vm.box = "generic/debian10"
   end
 
+  config.vm.define "fw2", autostart: true do |fw2|
+    fw2.vm.provider "virtualbox" do |v|
+      v.memory = "1024"
+      v.customize ["modifyvm", :id, "--nic1", "nat"]
+      v.customize ["modifyvm", :id, "--nic2", "intnet"]
+      v.customize ["modifyvm", :id, "--nic3", "intnet"]
+      v.customize ["modifyvm", :id, "--nic4", "intnet"]
+    end
+
+    fw2.vm.box = "fw2"
+    fw2.vm.hostname= "fw2"
+    fw2.vm.network "private_network", ip: "10.33.10.34", netmask: "255.255.255.224", virtualbox__intnet: true
+    fw2.vm.network "private_network", ip: "10.33.10.129", netmask: "255.255.255.224", virtualbox__intnet: true
+    fw2.vm.network "private_network", ip: "10.33.10.161", netmask: "255.255.255.224", virtualbox__intnet: true
+    fw2.vm.box = "generic/debian10"
+  end
+
   config.vm.define "webdns", autostart: true do |webdns|
     webdns.vm.provider "virtualbox" do |v|
       v.memory = "2048"
@@ -80,7 +97,7 @@ Vagrant.configure("2") do |config|
 
     apacheInt.vm.box = "apacheInt"
     apacheInt.vm.hostname= "apacheInt"
-    apacheInt.vm.network "private_network", ip: "10.33.10.101", netmask: "255.255.255.224", virtualbox__intnet: true
+    apacheInt.vm.network "private_network", ip: "10.33.10.162", netmask: "255.255.255.224", virtualbox__intnet: true
     apacheInt.vm.box = "generic/debian10"
 
 

@@ -1,5 +1,4 @@
 #!/bin/bash
-#NO INTERNET
 
 if [ $# -ne 1 ];then
 	echo "Me tienes que pasar un argumento: sinInt conInt"
@@ -7,7 +6,7 @@ if [ $# -ne 1 ];then
 fi
 
 case $1 in 
-	sinInt)
+	  sinInt)
        if [ $(grep GATEWAY=10.33.10.97 /etc/sysconfig/network-scripts/ifcfg-eth1 | wc -l) -eq 0 ];then  
        	sudo echo "GATEWAY=10.33.10.97" >> /etc/sysconfig/network-scripts/ifcfg-eth1
        	sudo ip route del default
