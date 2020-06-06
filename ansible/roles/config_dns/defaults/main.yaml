@@ -6,4 +6,6 @@ cliente2:
   ip: 10.33.10.131
 google: 8.8.8.8
 dns2: 10.33.10.100
+apa2: 10.33.10.162
+ap2Nombre: apacheInt
 ...
