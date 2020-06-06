@@ -17,12 +17,17 @@ $TTL	86400
 ;Registros A
 {{ ansible_facts.hostname }}	IN 		A 		{{ ansible_facts.eth1.ipv4.address }}
 {{ cliente2.nombre }}			IN 		A 		{{ cliente2.ip }}
+{{ apa2Nombre }}						IN      A       {{ apa2 }}
 
 ;Alias
 {{ zara.name }}					IN    	CNAME 	{{ ansible_facts.hostname }}
 www.{{ zara.name }}				IN    	CNAME 	{{ ansible_facts.hostname }}
 {{ mercadona.name }}					IN    	CNAME 	{{ ansible_facts.hostname }}
 www.{{ mercadona.name }}				IN    	CNAME 	{{ ansible_facts.hostname }}
+www.{{ nameMundo }}			IN 		CNAME 	{{ apa2Nombre }}
+{{ nameMundo }}			IN 		CNAME 	{{ apa2Nombre }}
+www.{{ nameMarca }}			IN 		CNAME 	{{ apa2Nombre }}
+{{ nameMarca }}			IN 		CNAME 	{{ apa2Nombre }}
 {{ dominioBusqueda }}			IN 				CNAME	{{ ansible_facts.hostname }}
 {{ ansible_facts.hostname }}.{{ dominioBusqueda }}			IN 				CNAME	{{ ansible_facts.hostname }}
 
